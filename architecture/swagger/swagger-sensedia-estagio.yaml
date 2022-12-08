@@ -1,0 +1,313 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Sensedia - Dinâmica Estágio 2023
+  description: API responsável pelas funcionalidades da dinâmica do Programa de Estágio - Sensedia 2023
+  termsOfService: "http://swagger.io/terms/"
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+paths:
+  /v1/countries:
+    get:
+      tags:
+        - Countries
+      summary: Retorna uma lista de países
+      description: Retorna uma lista de países
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GetCountriesResponse"
+  /v1/countries/{countryId}/passwords:
+    get:
+      tags:
+        - Countries
+      summary: Retorna a senha do país
+      description: Retorna a senha do país
+      parameters:
+        - in: path
+          name: countryId
+          schema:
+            type: string
+          required: true
+          description: Identificador do país
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCountryPasswordsResponse"
+  /v1/countries/{countryId}/cities:
+    get:
+      tags:
+        - Cities
+      summary: Retorna uma lista de cidades de um país
+      description: Retorna uma lista de cidades de um país
+      parameters:
+        - in: path
+          name: countryId
+          schema:
+            type: string
+          required: true
+          description: Identificador do país
+        - in: query
+          name: name
+          schema:
+            type: string
+          required: false
+          description: Filtro por nome da cidade
+        - in: query
+          name: capital
+          schema:
+            type: boolean
+          required: false
+          description: Filtro por capital
+        - in: query
+          name: population
+          schema:
+            type: number
+          required: false
+          description: Filtro por range de quantidade de habitantes
+        - in: query
+          name: order
+          schema:
+            type: string
+            enum: [ ASC, DESC ]
+          required: false
+          description: Ordenação (por nome)
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GetCitiesResponse"
+        404:
+          description: Not Found
+    post:
+      tags:
+        - Cities
+      summary: Registra uma nova cidade para um país
+      description: Registra uma nova cidade para um país
+      parameters:
+        - in: path
+          name: countryId
+          schema:
+            type: string
+          required: true
+          description: Identificador do país
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostCreateCitiesByCountryRequest"
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BadRequestResponse"
+        404:
+          description: Not Found
+        409:
+          description: Conflict
+  /v1/countries/{countryId}/cities/{cityId}:
+    put:
+      tags:
+        - Cities
+      summary: Altera/Registra uma cidade de um país
+      description: Altera/Registra uma cidade de um país
+      parameters:
+        - in: path
+          name: countryId
+          schema:
+            type: string
+          required: true
+          description: Identificador do país
+        - in: path
+          name: cityId
+          schema:
+            type: string
+          required: true
+          description: Identificador da cidade
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PutCreateCitiesByCountryRequest"
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BadRequestResponse"
+        404:
+          description: Not Found
+        409:
+          description: Conflict
+  /v1/countries-passwords:
+    post:
+      tags:
+        - Validar Senha [API Sensedia]
+      summary: Retorna a validação da senha passada
+      description: Retorna a validação da senha passada
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetValidateCountryPasswordsRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/GetValidateCountryPasswordsResponse"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/GetErrorValidateCountryPasswordsResponse"
+        404:
+          description: Not Found
+components:
+  schemas:
+    BadRequestResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: "Código do erro (formato: 3 dígitos com o http status + 3 dígitos com o código do erro)"
+          example: "400.001"
+        message:
+          type: string
+          description: Mensagem de erro
+    GetCountriesResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador do país
+          example: "83a50e15-57a6-4449-9638-e310800e9f47"
+        name:
+          type: string
+          description: Nome do país
+          example: "Brasil"
+        pib:
+          type: number
+          description: Valor do PIB em 2021 do país
+          example: 8700000000000
+        sensedia:
+          type: boolean
+          description: Flag indicando se a Sensedia está no país
+          example: true
+    GetCitiesResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador da cidade
+          example: "34a50e15-57a6-4449-9638-e310800e9f56"
+        name:
+          type: string
+          description: Nome da cidade
+          example: "São Paulo"
+        population:
+          type: integer
+          description: Quantidade de habitantes da cidade
+          example: 12400232
+        capital:
+          type: boolean
+          description: Flag indicando se a cidade é uma capital
+          example: false
+    PostCreateCitiesByCountryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "São Paulo"
+          description: Nome da cidade
+        population:
+          type: integer
+          example:  12400232
+          description: Quantidade de habitantes da cidade
+        capital:
+          type: boolean
+          example: false
+          description: Flag indicando se a cidade é uma capital
+      required: [ name, population, capital ]
+    PutCreateCitiesByCountryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Brasília"
+          description: Nome da cidade
+        population:
+          type: number
+          example:  3094325
+          description: Quantidade de habitantes  da cidade
+        capital:
+          type: boolean
+          example: true
+          description: Flag indicando se a cidade é uma capital
+      required: [ name, population, capital ]
+    GetCountryPasswordsResponse:
+      type: object
+      properties:
+        password:
+          type: string
+          example: "3030"
+          description: Senha do país
+    GetValidateCountryPasswordsRequest:
+      type: object
+      properties:
+        countryId:
+          type: string
+          example: "3935712b-0ae0-4877-a18c-9d78a33647d6"
+          description: ID do país
+        password:
+          type: string
+          example: "3030"
+          description: Senha do país
+    GetValidateCountryPasswordsResponse:
+      type: object
+      properties:
+        isPassword:
+          type: boolean
+          example: "true"
+          description: Flag indicando se é a senha
+        message:
+          type: string
+          example: "Parabéns, sua equipe concluiu o Sense Challenge! Agora monte uma apresentação para contar como foi a experiência da equipe para os demais participantes. Tempo de apresentação:  5 min"
+          description: Mensagem sobre a senha
+    GetErrorValidateCountryPasswordsResponse:
+      type: object
+      properties:
+        isPassword:
+          type: boolean
+          example: "false"
+          description: Flag indicando se é a senha
+        message:
+          type: string
+          example: "Senha incorreta. Tente novamente."
+          description: Mensagem sobre a senha

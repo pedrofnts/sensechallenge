@@ -1,0 +1,253 @@
+{
+	"info": {
+		"_postman_id": "8c1d9220-ff83-4fd5-be3c-062a38d4248a",
+		"name": "Sense-Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Countries",
+			"item": [
+				{
+					"name": "GET /countries",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"responseCode\": -2,\n    \"responseDesc\": \"Invalid input parameter. branch\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sense-challenge/v1/countries",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sense-challenge",
+								"v1",
+								"countries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /countries/{countryId}/passwords",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sense-challenge/v1/countries/:countryId/passwords",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sense-challenge",
+								"v1",
+								"countries",
+								":countryId",
+								"passwords"
+							],
+							"variable": [
+								{
+									"key": "countryId",
+									"value": "a6c36438-12bd-41dc-8eb5-82c3eaeaa5b9"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cities",
+			"item": [
+				{
+					"name": "POST /countries/{countryId}/cities",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Bauru\",\n    \"population\": 12400232,\n    \"capital\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sense-challenge/v1/countries/:countryId/cities",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sense-challenge",
+								"v1",
+								"countries",
+								":countryId",
+								"cities"
+							],
+							"variable": [
+								{
+									"key": "countryId",
+									"value": "2f443e85-a643-42aa-88a2-68766cd48850"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /countries/{countryId}/cities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sense-challenge/v1/countries/:countryId/cities?name=Botucatu",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sense-challenge",
+								"v1",
+								"countries",
+								":countryId",
+								"cities"
+							],
+							"query": [
+								{
+									"key": "order",
+									"value": "ASC",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Botucatu"
+								},
+								{
+									"key": "capital",
+									"value": "false",
+									"disabled": true
+								},
+								{
+									"key": "initialPopulation",
+									"value": "1000000",
+									"disabled": true
+								},
+								{
+									"key": "finalPopulation",
+									"value": "2000000",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "countryId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT /countries/{countryId}/cities/{cityId}",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Botucatu\",\n    \"population\": 12400233,\n    \"capital\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sense-challenge/v1/countries/:countryId/cities/:cityId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sense-challenge",
+								"v1",
+								"countries",
+								":countryId",
+								"cities",
+								":cityId"
+							],
+							"variable": [
+								{
+									"key": "countryId",
+									"value": "2f443e85-a643-42aa-88a2-68766cd48850"
+								},
+								{
+									"key": "cityId",
+									"value": "9d4f01b4-6cc1-4b31-8dd9-ff2e5119e4e9"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Validar Senha",
+			"item": [
+				{
+					"name": "POST /sense-challenge/v1/countries-passwords",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"countryId\": \"3935712b-0ae0-4877-a18c-9d78a33647d6\",\n    \"password\": 10000\n}"
+						},
+						"url": {
+							"raw": "https://api-solutions.sensedia.com/sense-challenge/v1/countries-passwords",
+							"protocol": "https",
+							"host": [
+								"api-solutions",
+								"sensedia",
+								"com"
+							],
+							"path": [
+								"sense-challenge",
+								"v1",
+								"countries-passwords"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
